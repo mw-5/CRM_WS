@@ -19,12 +19,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.Customer;
 import model.Note;
+import org.slf4j.*;
 
 
 @Stateless
 @Path("note")
 public class NoteController 
 {
+    Logger logger = LoggerFactory.getLogger(NoteController.class);
+    
     @PersistenceContext(unitName = "CRM_WSPU")
     private EntityManager em;
     
@@ -157,6 +160,7 @@ public class NoteController
         catch(IOException e)
         {
             System.out.println("Exception thrown: " + e.getMessage());
+            logger.error(e.getMessage(), e);
         }
     }
     
