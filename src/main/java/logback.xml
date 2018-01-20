@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+    
+    <!-- manual for configuration: https://logback.qos.ch/manual/configuration.html -->
+
+    <variable name="PATH" value="D:/CRM_WS/logs" />
+    
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${PATH}/logFile.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${PATH}/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            
+            <!-- keep 30 days' worth of history capped at 3GB total size -->
+            <!--<maxHistory>30</maxHistory>-->
+            <!--<totalSizeCap>3GB</totalSizeCap>-->
+            
+        </rollingPolicy>
+        <encoder>
+            <!-- avoid use of %file, %line, %method and %class as they are slow -->
+            <!-- %d without format pattern results in pattern {"yyyy-MM-dd HH:mm:ss, SSS"} -->
+            <!-- complete list of availale options for pattern: https://logback.qos.ch/manual/layouts.html -->
+            <!-- relative = milliseconds past since start of application -->
+            <pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} ${USERNAME: -anonymous} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- name is argument expected by getLogger() of logger factory.
+        It is good practice to use qualified name of class to show origin of log in message.
+        Logger specified by logger element is also chosen for instantiation if name attribute 
+        of logger element is only the start of argument passed to getLogger()  -->
+    <logger name="myLogger" level="TRACE">
+        <appender-ref ref="FILE" />
+    </logger>
+    
+    <root level="TRACE">
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>
