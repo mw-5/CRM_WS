@@ -9,11 +9,15 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.Customer;
+import org.slf4j.*;
+
 
 @Stateless
 @Path("customer")
 public class CustomerController 
 {
+    Logger logger = LoggerFactory.getLogger(CustomerController.class);
+    
     @PersistenceContext(unitName = "CRM_WSPU")
     private EntityManager em;
     
@@ -41,6 +45,7 @@ public class CustomerController
     public Response createCustomer(Customer c)
     {
         System.err.println("create customer calles");
+        logger.trace("create customer called");  // other severity levels e.g. are: .debug() or .info()
         Integer cid = (Integer)em.createQuery("SELECT max(c.cid) FROM Customer c").getSingleResult();
         cid++;
         c.setCid(cid);
@@ -53,6 +58,7 @@ public class CustomerController
     public Response editCustomer(Customer c)
     {
         System.err.println("editCustomer() called");
+        logger.trace("editCustomer() called");
         em.merge(c);
         return Response.ok().build();
     }
